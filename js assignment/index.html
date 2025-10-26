@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Employee Directory</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="container">
+    <h1>Employee Directory</h1>
+
+    <div class="controls">
+      <input id="searchInput" type="search" placeholder="Search employees by name, role or department..." />
+    </div>
+
+    <div id="listContainer" class="list-container" aria-live="polite"></div>
+
+    <div id="detailModal" class="modal hidden" role="dialog" aria-modal="true">
+      <div class="modal-content">
+        <button id="closeModal" class="close">×</button>
+        <div id="detailContent"></div>
+      </div>
+    </div>
+
+    <aside class="recent">
+      <h3>Recently viewed</h3>
+      <ul id="recentList"></ul>
+    </aside>
+  </main>
+
+  <script src="app.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="jquery-script.js"></script>
+  <script src="scripts.js"></script>
+</body>
+</html>
