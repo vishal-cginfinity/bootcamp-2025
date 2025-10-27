@@ -1,0 +1,73 @@
+import json
+import boto3
+import csv
+import io
+import urllib.request
+import os
+ 
+S3_BUCKET_NAME = os.environ['BUCKET_NAME']
+ 
+s3_client = boto3.client('s3')
+ 
+def load_config():
+    """Loads API URLs from the local config.json file."""
+    with open('config.json', 'r') as f:
+        config = json.load(f)
+    return config
+ 
+def upload_to_s3(data_string, file_key):
+    """Uploads a string of data to a specified S3 key."""
+    try:
+        s3_client.put_object(
+            Bucket=S3_BUCKET_NAME,
+            Key=file_key,
+            Body=data_string
+        )
+        print(f"Successfully uploaded to s3://{S3_BUCKET_NAME}/{file_key}")
+    except Exception as e:
+        print(f"Error uploading to S3: {e}")
+        raise e
+ 
+def lambda_handler(event, context):
+    """Main Lambda function."""
+ 
+    try:
+        config = load_config()
+ 
+        print("Fetching JSON data from API 1...")
+        with urllib.request.urlopen(config['json_api_url']) as response:
+            json_data = response.read().decode('utf-8')
+ 
+
+        upload_to_s3(json_data, "raw_data/users.json")
+ 
+ 
+
+        print("Fetching CSV data from API 2...")
+        with urllib.request.urlopen(config['csv_api_url']) as response:
+            csv_text = response.read().decode('utf-8')
+ 
+
+        print("Transforming CSV to JSON...")
+        csv_file = io.StringIO(csv_text)
+ 
+        reader = csv.DictReader(csv_file)
+ 
+        csv_data_as_list = list(reader)
+
+        json_output = json.dumps(csv_data_as_list, indent=4)
+ 
+        upload_to_s3(json_output, "raw_data/companies.json")
+ 
+ 
+        return {
+            'statusCode': 200,
+            'body': json.dumps('Success! Fetched, transformed, and uploaded 2 files.')
+        }
+ 
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+        return {
+            'statusCode': 500,
+            'body': json.dumps(f'Error: {str(e)}')
+        }
