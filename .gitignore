@@ -21,3 +21,17 @@ yarn-error.log*
 
 # Optional: OS-specific files
 Thumbs.db
+
+# Python
+chatbot_project_folder/__pycache__/
+chatbot_project_folder/venv/
+*.pyc
+ 
+# Environment
+chatbot_project_folder/.env
+ 
+# OS
+.DS_Store
+ 
+# Vector Store
+chatbot_project_folder/faiss_index/
