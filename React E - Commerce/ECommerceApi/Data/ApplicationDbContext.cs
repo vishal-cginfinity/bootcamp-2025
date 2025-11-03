@@ -11,7 +11,7 @@ namespace ECommerceApi.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
  
-        // This method seeds your database with "Option 1" sample data
+        // This method seeds your database with sample data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
